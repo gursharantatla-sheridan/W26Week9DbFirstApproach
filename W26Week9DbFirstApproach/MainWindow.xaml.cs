@@ -30,7 +30,10 @@ namespace W26Week9DbFirstApproach
 
         private void LoadStudents()
         {
-            var students = db.Students.ToList();
+            //var students = db.Students.ToList();
+            var students = (from std in db.Students
+                           select new { std.StudentID, std.StudentName, std.Standard.StandardName }).ToList();
+
             grdStudents.ItemsSource = students;
         }
 
@@ -102,6 +105,15 @@ namespace W26Week9DbFirstApproach
 
             LoadStudents();
             MessageBox.Show("Student deleted");
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            var students = (from std in db.Students
+                           where std.StudentName.Contains(txtName.Text)
+                           select std).ToList();
+
+            grdStudents.ItemsSource = students;
         }
     }
 }
